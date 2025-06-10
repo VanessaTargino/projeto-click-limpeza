@@ -89,7 +89,7 @@ export class Diarista {
     
 
    public avaliarServico(nota: number): void {
-    
+
         if (nota < 1 || nota > 5) {
             console.log("Nota inválida. A nota deve ser entre 1 e 5.");
             return;
@@ -109,4 +109,31 @@ export class Diarista {
     public obterMedia(): number {
         return this._mediaAvaliacoes;
     }
+    public visualizar(): void {
+
+        let tipo: string = "";
+
+        if (this._experiencia < 1) {
+            tipo = "Iniciante";
+        } else if (this._experiencia <= 3) {
+            tipo = "Intermediário";
+        } else {
+            tipo = "Avançado";
+        }
+
+        console.log("\n\n*****************************************************");
+        console.log("Dados da Profissional:");
+        console.log("*****************************************************");
+        console.log("Id do Profissional " + this._id);
+        console.log("Nome: " + this._nome);
+        console.log("Email: " + this._email);
+        console.log("Telefone: " + this._telefone);
+        console.log("Região: " + this._regiao);
+        console.log("Experiência: " + this._experiencia + " anos");
+        console.log("Média de Avaliações: " + this._mediaAvaliacoes.toFixed(2));
+        console.log("Tipo de Profissional: " + tipo);
+        console.log("*****************************************************\n\n");
+
+    }
+
 }
