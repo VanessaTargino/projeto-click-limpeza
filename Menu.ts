@@ -80,3 +80,15 @@ export function main(){
     }
 
 }
+
+export function sobre(): void {
+    console.log("\n*****************************************************");
+    console.log("Projeto Desenvolvido por: Vanessa Targino");
+    console.log("Contato - targino.so.vanessa@gmail.com");
+    console.log("github.com/VanessaTargino");
+    console.log("Curso FullStack JavaScript - Generation Brasil");
+    console.log("https://www.generation.org.br");
+    console.log("*****************************************************");
+}
+
+main();
