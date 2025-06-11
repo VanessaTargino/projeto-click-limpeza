@@ -1,139 +1,66 @@
-export class Diarista {
-    private _id: number;
-    private _nome: string;
-    private _email: string;
-    private _telefone: number;
-    private _avaliacoes: number [] = [];
-    private _mediaAvaliacoes: number = 0;
-    private _regiao: string;
-    private _experiencia: number;
-    private _disponibilidade: string;
+import { Profissional } from "./Profissional";
 
 
-    constructor (id: number, nome: string, email: string, telefone: number, avaliacoes: number[], mediaAvaliacoes: number, regiao: string, experiencia: number, disponibilidade: string) {
+export class Diarista extends Profissional {
+    private _agendarlimpeza: Date;
+    private _calcularPreco: number;
 
-        this._id = id;
-        this._nome = nome;
-        this._email = email;
-        this._telefone = telefone;
-        this._avaliacoes = avaliacoes;
-        this._mediaAvaliacoes = mediaAvaliacoes;
-        this._regiao = regiao;
-        this._experiencia = experiencia;
-        this._disponibilidade = disponibilidade;
+    constructor(id: number, nome: string, email: string, telefone: number,tipo: number, avaliacoes: number[], mediaAvaliacoes: number, regiao: string, experiencia: number, disponibilidade: string
+    ) {
+        super(id, nome, email, telefone,tipo, avaliacoes, mediaAvaliacoes, regiao, experiencia, disponibilidade);
+        this._agendarlimpeza = new Date();
+        this._calcularPreco = 0;
     }
-
-    public get id(): number {
-        return this._id;
-    }
-    public set id(numero: number) {
-        this._id = numero;
+    public get agendarlimpeza(): Date {
+        return this._agendarlimpeza;
     }
 
-    public get nome(): string {
-    return this._nome;
-    }
-    public set nome(nome: string) {
-        this._nome = nome;
+    public set agendarlimpeza(data: Date) {
+        this._agendarlimpeza = data;
     }
 
-    public get email(): string {
-        return this._email;
-    }
-    public set email(email: string) {
-        this._email = email;
+    public get calcularPreco(): number {
+        return this._calcularPreco;
     }
 
-    public get telefone(): number {
-        return this._telefone;
-    }
-    public set telefone(telefone: number) {
-        this._telefone = telefone;
+    public set calcularPreco(preco: number) {
+        this._calcularPreco = preco;
     }
 
-    public get avaliacoes(): number[] {
-        return this._avaliacoes;
-    }
-    public set avaliacoes(avaliacoes: number[]) {
-        this._avaliacoes = avaliacoes;
-    }
+    public calcularPrecoServico(duracao: number): number {
+        let precoPorHora: number;
 
-    public get mediaAvaliacoes(): number {
-        return this._mediaAvaliacoes;
-    }
-    public set mediaAvaliacoes(mediaAvaliacoes: number) {
-        this._mediaAvaliacoes = mediaAvaliacoes;
-    }
-
-    public get regiao(): string {
-        return this._regiao;
-    }
-    public set regiao(regiao: string) {
-        this._regiao = regiao;
-    }
-
-    public get experiencia(): number {
-        return this._experiencia;
-    }
-    public set experiencia(experiencia: number) {
-        this._experiencia = experiencia;
-    }
-
-    public get disponibilidade(): string {
-        return this._disponibilidade;
-    }
-    public set disponibilidade(disponibilidade: string) {
-        this._disponibilidade = disponibilidade;
-    }
-
-    
-
-   public avaliarServico(nota: number): void {
-
-        if (nota < 1 || nota > 5) {
-            console.log("Nota inválida. A nota deve ser entre 1 e 5.");
-            return;
-        }
-
-        this._avaliacoes.push(nota); 
-
-        this._mediaAvaliacoes = this._avaliacoes.reduce((soma, valor) => soma + valor, 0) / this._avaliacoes.length;
-
-        console.log(`Avaliação atualizada para ${this._mediaAvaliacoes.toFixed(2)}`);
-    }
-
-    public listarAvaliacoes(): void {
-        console.log("Histórico de avaliações:", this._avaliacoes);
-    }
-
-    public obterMedia(): number {
-        return this._mediaAvaliacoes;
-    }
-    public visualizar(): void {
-
-        let tipo: string = "";
-
-        if (this._experiencia < 1) {
-            tipo = "Iniciante";
-        } else if (this._experiencia <= 3) {
-            tipo = "Intermediário";
+        // Assuming Profissional has a protected or public _experiencia property
+        if (this.experiencia > 5) {
+            precoPorHora = 40;
+        } else if (this.experiencia >= 2) {
+            precoPorHora = 30;
         } else {
-            tipo = "Avançado";
+            precoPorHora = 20;
         }
 
-        console.log("\n\n*****************************************************");
-        console.log("Dados da Profissional:");
-        console.log("*****************************************************");
-        console.log("Id do Profissional " + this._id);
-        console.log("Nome: " + this._nome);
-        console.log("Email: " + this._email);
-        console.log("Telefone: " + this._telefone);
-        console.log("Região: " + this._regiao);
-        console.log("Experiência: " + this._experiencia + " anos");
-        console.log("Média de Avaliações: " + this._mediaAvaliacoes.toFixed(2));
-        console.log("Tipo de Profissional: " + tipo);
-        console.log("*****************************************************\n\n");
-
+        return precoPorHora * duracao;
     }
 
+    public agendarLimpeza(data: Date, duracao: number): void {
+        this._agendarlimpeza = data;
+        this._calcularPreco = this.calcularPrecoServico(duracao);
+        console.log(
+            `Limpeza agendada para ${this._agendarlimpeza.toLocaleDateString("pt-BR")} com custo de R$${this._calcularPreco.toFixed(2)}`
+        );
+    }
+
+    public cancelarAgendamento(): void {
+        this._agendarlimpeza = new Date();
+        this._calcularPreco = 0;
+        console.log("Agendamento cancelado.");
+    }
+
+    public listarAgendamentos(): void {
+        if (this._calcularPreco > 0) {
+            console.log(`Agendamento: ${this._agendarlimpeza.toLocaleDateString("pt-BR")}, Preço: R$${this._calcularPreco.toFixed(2)}`);
+        } else {
+            console.log("Nenhum agendamento encontrado.");
+        }
+    }
 }
