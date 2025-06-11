@@ -1,4 +1,8 @@
 export abstract class Profissional {
+    cancelarAgendamento: any;
+    agendarServico(data: Date, duracao: number) {
+        throw new Error("Method not implemented.");
+    }
 
     private _id: number;
     private _nome: string;

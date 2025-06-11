@@ -5,7 +5,7 @@ import { PersonalOrganizer } from "./src/model/PersonalOrganizer";
 import { Controller } from "./src/controller/Controller";
 
 
-export function main(){
+export function main(this: any){
 
     let profissional: Controller = new Controller();
 
@@ -41,7 +41,7 @@ export function main(){
         console.log("                                                     ");
         console.log("            1 - Cadastrar Profissional               ");
         console.log("            2 - Listar Profissionais Disponíveis     ");
-        console.log("            3 - Buscar Profissional por região       ");
+        console.log("            3 - Buscar Profissional por Id           ");
         console.log("            4 - Atualizar Dados do Profissional      ");
         console.log("            5 - Apagar Cadastro                      ");
         console.log("            6 - Agendar Serviço                      ");
@@ -107,7 +107,7 @@ export function main(){
                         );
                         break;
                     default:
-                        console.log(colors.fg.redstrong, "Tipo de servico inválido.", colors.reset);
+                        console.log(colors.fg.magentastrong, "Tipo de servico inválido.", colors.reset);
                         break;
                 }
 
@@ -123,8 +123,11 @@ export function main(){
 
             case 3:
                 console.log(colors.fg.whitestrong,
-                    "\n\nBuscar Profissional por região\n\n", colors.reset);
+                    "\n\nBuscar Profissional por id\n\n", colors.reset);
 
+                    console.log('Digite o número de Identificação(Id) do Profissional: ')
+                    id = readlinesync.questionInt ('');
+                    profissional.buscarPorId(id);
             
                 keyPress();
                 break;
@@ -132,18 +135,72 @@ export function main(){
             case 4:
                 console.log(colors.fg.whitestrong,
                     "\n\nAtualizar Dados do Profissional\n\n", colors.reset);
+
+                    console.log('Informe o número de Identificação (Id) do Profisisonal: ')
+                    id = readlinesync.questionInt('');
+
+                    let profissionais = profissional.buscarNoArray(id);
+
+                    if (profissionais !== null) {
+
+                    console.log('Informe o nome do novo profissional')
+                    nome = readlinesync.question('');
+
+                    console.log('Informe um e-mail para cadastro: ');
+                    email = readlinesync.question('');
+
+                    console.log('Informe um telefone: (11900000000)');
+                    telefone = readlinesync.questionInt('');
+
+                    console.log ('Informe a região de atuação: (Zona Norte/Lest/Sul/Oeste/Central)');
+                    regiao = readlinesync.question('');
+
+                    console.log ('Informe a disponibilidade: ');
+                    disponibilidade = readlinesync.question('');
+
+                    console.log ('Informe o período de experiência em anos: ');
+                    experiencia = readlinesync.questionInt('');
+
+                    console.log('Informe o tipo de serviço (1 - Diarista, 2 - Personal Organizer):');
+                    tipo = readlinesync.questionInt('');
+
+                        switch (tipo){
+                    case 1:
+                        console.log('Digite carga horária: ')
+                        duracao = readlinesync.questionInt('');
+                        profissional.atualizar(
+                            new Diarista(id, nome, email, telefone, tipo, [], 0, regiao, experiencia, disponibilidade)
+                        );
+                        break;
+                    case 2:
+                        console.log('Informe o ambiente que será organizado')
+                        ambiente = readlinesync.question('');
+                        profissional.atualizar(
+                            new PersonalOrganizer(id, nome, email, telefone, tipo, [], 0, regiao, experiencia, disponibilidade)
+                        );
+                    }
+                } else {
+                    console.log(colors.fg.magentastrong, 'Cadastro não localizado!', colors.reset);
+                }
+
                 keyPress();
                 break;
 
             case 5:
                 console.log(colors.fg.whitestrong,
                     "\n\nApagar Cadastro\n\n", colors.reset);
+                    
+                    console.log('Digite o número de Identificação (Id) do Profissional: ');
+                    id = readlinesync.questionInt('');
+                    profissional.apagar(id);
+
                 keyPress();
                 break;
 
             case 6:
                 console.log(colors.fg.whitestrong,
                     "\n\nAgendar Serviço\n\n", colors.reset);
+
                 keyPress();
                 break;
             
@@ -166,7 +223,7 @@ export function main(){
                 break;
 
             default:
-                console.log(colors.fg.redstrong,"\n\nOpção inválida. Tente novamente.\n\n", colors.reset);
+                console.log(colors.fg.magentastrong,"\n\nOpção inválida. Tente novamente.\n\n", colors.reset);
                 keyPress();
                 console.clear();
                 break;
@@ -188,7 +245,7 @@ export function sobre(): void {
 
 main();
 
-function keyPress(): void {
+export function keyPress(): void {
     console.log(colors.reset, "");
     console.log("\nPressione enter para continuar...");
     readlinesync.prompt();

@@ -50,7 +50,7 @@ export class Diarista extends Profissional {
         );
     }
 
-    public cancelarAgendamento(): void {
+    public cancelarAgendamento = (): void => {
         this._agendarlimpeza = new Date();
         this._calcularPreco = 0;
         console.log("Agendamento cancelado.");
